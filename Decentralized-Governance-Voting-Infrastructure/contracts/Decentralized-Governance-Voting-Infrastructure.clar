@@ -314,3 +314,41 @@
     (ok true)
   )
 )
+
+;; NEW FEATURE: Vote Types (beyond simple yes/no)
+(define-constant VOTE-TYPES 
+  {
+    FOR: u1,
+    AGAINST: u2,
+    ABSTAIN: u3
+  }
+)
+
+;; Governance configuration variables
+(define-data-var min-proposal-duration uint u144) ;; Default: ~1 day at 10 min block times
+(define-data-var max-proposal-duration uint u4320) ;; Default: ~30 days at 10 min block times
+(define-data-var proposal-submission-min-tokens uint u100000) ;; Minimum tokens to submit proposal
+(define-data-var treasury-max-per-proposal uint u100000000) ;; 10% of total token supply
+
+;; Treasury management
+(define-data-var treasury-balance uint u0)
+(define-map treasury-allocations
+  {allocation-id: uint}
+  {
+    proposal-id: uint,
+    recipient: principal,
+    amount: uint,
+    executed: bool
+  }
+)
+
+(define-data-var next-allocation-id uint u0)
+
+;; Time-lock mechanism
+(define-map time-locks
+  {proposal-id: uint}
+  {
+    execution-block: uint,
+    executed: bool
+  }
+)
